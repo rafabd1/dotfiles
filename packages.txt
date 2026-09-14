@@ -1,7 +1,7 @@
 # 43PR/dotfiles
 # Arch Linux packages required for the Hyprland setup
 #
-# Note: some of these (currently: wlogout) live only in the AUR,
+# Note: some of these (currently: Caelestia and Brave) live only in the AUR,
 # not in the official repos. install.sh detects this automatically
 # and installs them with paru/yay if one is available.
 
@@ -10,11 +10,9 @@
 # --------------------------------------------------
 
 hyprland
-waybar
-rofi
-hyprlock
-wlogout
-quickshell
+caelestia-shell
+caelestia-cli
+fuzzel
 jq
 xdg-desktop-portal-hyprland
 xorg-xwayland
@@ -23,10 +21,8 @@ xorg-xwayland
 # Wallpaper / screenshots
 # --------------------------------------------------
 
-awww
 grim
 slurp
-imagemagick
 
 # --------------------------------------------------
 # Clipboard
@@ -59,12 +55,8 @@ brave-bin
 # Desktop services used by the configuration
 # --------------------------------------------------
 
-dunst
-network-manager-applet
 polkit-kde-agent
-playerctl
 pavucontrol
-gammastep
 nvtop
 gpu-screen-recorder
 

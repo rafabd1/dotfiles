@@ -1,6 +1,6 @@
 #!/bin/bash
 
-choice=$(printf "100%%\n90%%\n80%%\n70%%\n60%%\n50%%\n40%%" | rofi -dmenu -p "")
+choice=$(printf "100%%\n90%%\n80%%\n70%%\n60%%\n50%%\n40%%" | fuzzel --dmenu --prompt="")
 
 case "$choice" in
     "100%") opacity=1.0 ;;

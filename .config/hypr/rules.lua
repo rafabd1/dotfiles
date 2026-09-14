@@ -2,12 +2,6 @@
 -- Migrated from rules.conf
 -- Docs: https://wiki.hypr.land/Configuring/Basics/Window-Rules/
 
-hl.layer_rule({
-    match = { namespace = "rofi" },
-    blur = true,
-    ignore_alpha = 0.15,
-})
-
 -- Opacity rules: 90% for all windows except fullscreen
 hl.window_rule({
     match = { class = ".*" },

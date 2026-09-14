@@ -1,0 +1,20 @@
+{
+  "theme": {
+    "enableTerm": false,
+    "enableHypr": true,
+    "enableDiscord": false,
+    "enableSpicetify": false,
+    "enablePandora": false,
+    "enableFuzzel": true,
+    "enableBtop": true,
+    "enableNvtop": true,
+    "enableHtop": true,
+    "enableGtk": false,
+    "enableQt": false,
+    "enableWarp": false,
+    "enableChromium": false,
+    "enableZed": false,
+    "enableCava": true,
+    "postHook": "~/.config/caelestia/scripts/reload-kitty-theme.sh"
+  }
+}

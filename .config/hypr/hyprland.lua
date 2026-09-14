@@ -1,11 +1,18 @@
 -- ~/.config/hypr/hyprland.lua
 -- Docs: https://wiki.hypr.land/Configuring/Start/
 
+local scheme_ok, scheme = pcall(require, "scheme.current")
+if not scheme_ok then
+    scheme = {
+        primary = "82dccc",
+        onSurfaceVariant = "798bb2",
+    }
+end
+
 ---- MY PROGRAMS ----
 
 mainMod    = "SUPER"
 terminal   = "kitty"
-menu       = "rofi -show drun"
 fileManager = "thunar"
 browser    = "brave"
 
@@ -13,15 +20,11 @@ browser    = "brave"
 ---- AUTOSTART ----
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("dunst")
-    hl.exec_cmd("nm-applet")
+    hl.exec_cmd("caelestia shell -d")
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
     hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
-
-    hl.exec_cmd("awww-daemon")
-    hl.exec_cmd("qs -d -c volume-osd")
+    hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/power-watch.sh")
 end)
 
 ---- ENVIRONMENT VARIABLES ----
@@ -56,7 +59,11 @@ hl.config({
     general = {
         gaps_in = 3,
         gaps_out = 3,
-        border_size = 0,
+        border_size = 1,
+        col = {
+            active_border = "rgba(" .. scheme.primary .. "e6)",
+            inactive_border = "rgba(" .. scheme.onSurfaceVariant .. "22)",
+        },
         resize_on_border = true,
         allow_tearing = false,
         layout = "dwindle",

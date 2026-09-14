@@ -1,0 +1,24 @@
+{
+  "general": {
+    "apps": {
+      "terminal": ["kitty"],
+      "audio": ["pavucontrol"],
+      "playback": ["mpv"],
+      "explorer": ["dolphin"]
+    }
+  },
+  "dashboard": {
+    "resourceUpdateInterval": 3000,
+    "performance": {
+      "showGpu": false
+    }
+  },
+  "services": {
+    "gpuType": "None",
+    "smartScheme": true,
+    "defaultPlayer": "Spotify"
+  },
+  "paths": {
+    "wallpaperDir": "~/Pictures/Wallpapers"
+  }
+}

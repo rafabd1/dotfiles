@@ -28,6 +28,8 @@ CONFIG_DIR="$HOME/.config"
 BACKUP_ROOT="$HOME/.config-backups"
 TIMESTAMP="$(date '+%Y-%m-%d_%H-%M-%S')"
 BACKUP_DIR="$BACKUP_ROOT/$TIMESTAMP"
+NITRO_POWER_DIR="$REPO_DIR/system/nitro5"
+NITRO_POWER_ENABLED=false
 
 # --------------------------------------------------
 # Colors / output
@@ -104,6 +106,27 @@ fi
 
 info "Detected distribution: ${PRETTY_NAME:-unknown}"
 
+SYSTEM_VENDOR="$(tr -d '\000' </sys/class/dmi/id/sys_vendor 2>/dev/null || true)"
+PRODUCT_NAME="$(tr -d '\000' </sys/class/dmi/id/product_name 2>/dev/null || true)"
+
+pci_vendor_present() {
+    local expected="$1"
+    local vendor_file
+
+    for vendor_file in /sys/bus/pci/devices/*/vendor; do
+        [[ -r "$vendor_file" ]] || continue
+        [[ "$(<"$vendor_file")" == "$expected" ]] && return 0
+    done
+
+    return 1
+}
+
+if [[ "${SYSTEM_VENDOR,,}" == *acer* && "${PRODUCT_NAME,,}" == *nitro* ]] \
+    && pci_vendor_present "0x1002" && pci_vendor_present "0x10de"; then
+    NITRO_POWER_ENABLED=true
+    info "Detected Acer Nitro with AMD + NVIDIA graphics: $PRODUCT_NAME"
+fi
+
 if [[ -n "$AUR_HELPER" ]]; then
     info "AUR helper available: $AUR_HELPER"
 else
@@ -178,6 +201,17 @@ else
     if [[ "${#UNKNOWN_PACKAGES[@]}" -gt 0 ]]; then
         warning "Could not resolve the following package(s) in any repo: ${UNKNOWN_PACKAGES[*]}"
         warning "Check the name with 'pacman -Ss <name>' or https://aur.archlinux.org, then fix packages.txt."
+    fi
+fi
+
+if [[ "$NITRO_POWER_ENABLED" == true ]]; then
+    info "Installing Nitro 5 power-management packages..."
+
+    if sudo pacman -S --needed --noconfirm power-profiles-daemon powertop; then
+        success "Nitro 5 power-management packages installed."
+    else
+        warning "Could not install every power-management package. System configuration will be skipped."
+        NITRO_POWER_ENABLED=false
     fi
 fi
 
@@ -259,7 +293,125 @@ if [[ -d "$CONFIG_DIR/hypr/scripts" ]]; then
         -exec chmod +x {} \;
 fi
 
+if [[ -d "$CONFIG_DIR/caelestia/scripts" ]]; then
+    find "$CONFIG_DIR/caelestia/scripts" \
+        -type f \
+        -exec chmod +x {} \;
+fi
+
 success "Permissions configured."
+
+# --------------------------------------------------
+# Caelestia wallpaper and adaptive theme
+# --------------------------------------------------
+
+if command -v caelestia >/dev/null 2>&1; then
+    CAELESTIA_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/caelestia"
+    WALLPAPER_STATE="$CAELESTIA_STATE_DIR/wallpaper/path.txt"
+    CURRENT_WALLPAPER=""
+    FIRST_WALLPAPER=""
+
+    if [[ -r "$WALLPAPER_STATE" ]]; then
+        IFS= read -r CURRENT_WALLPAPER < "$WALLPAPER_STATE" || true
+    fi
+
+    if [[ ! -f "$CURRENT_WALLPAPER" && -d "$HOME/Pictures/Wallpapers" ]]; then
+        while IFS= read -r -d '' candidate; do
+            FIRST_WALLPAPER="$candidate"
+            break
+        done < <(
+            find "$HOME/Pictures/Wallpapers" -type f \
+                \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.gif' \) \
+                -print0
+        )
+
+        if [[ -n "$FIRST_WALLPAPER" ]]; then
+            info "Setting the initial Caelestia wallpaper..."
+            if caelestia wallpaper -f "$FIRST_WALLPAPER"; then
+                CURRENT_WALLPAPER="$FIRST_WALLPAPER"
+            else
+                warning "Caelestia could not set the initial wallpaper."
+            fi
+        fi
+    fi
+
+    if [[ -f "$CURRENT_WALLPAPER" ]]; then
+        info "Generating the adaptive Caelestia theme..."
+        if caelestia scheme set -n dynamic; then
+            # Reapply once so smart mode can select light/dark from the image.
+            if caelestia wallpaper -f "$CURRENT_WALLPAPER"; then
+                success "Caelestia, Hyprland and Kitty now follow the active wallpaper."
+            else
+                warning "The dynamic palette was created, but the wallpaper could not be reapplied."
+            fi
+        else
+            warning "Caelestia could not generate the dynamic colour scheme."
+        fi
+    else
+        warning "No valid wallpaper was found. Choose one in Caelestia, then select the dynamic scheme."
+    fi
+else
+    warning "Caelestia CLI was not installed; skipping adaptive theme generation."
+fi
+
+# --------------------------------------------------
+# Acer Nitro 5 power management
+# --------------------------------------------------
+
+install_system_config() {
+    local source="$1"
+    local target="$2"
+    local backup="$BACKUP_DIR/system$target"
+
+    if [[ -e "$target" ]] && ! cmp -s "$source" "$target"; then
+        mkdir -p "$(dirname "$backup")"
+        if ! cp -a "$target" "$backup"; then
+            error "Could not back up $target; leaving it unchanged."
+            return 1
+        fi
+    fi
+
+    if ! sudo install -Dm644 "$source" "$target"; then
+        error "Could not install $target."
+        return 1
+    fi
+}
+
+if [[ "$NITRO_POWER_ENABLED" == true ]]; then
+    info "Applying the Nitro 5 battery profile..."
+    mkdir -p "$BACKUP_DIR"
+    SYSTEM_CONFIG_OK=true
+
+    install_system_config "$NITRO_POWER_DIR/nvidia-pm.conf" "/etc/modprobe.d/nvidia-pm.conf" || SYSTEM_CONFIG_OK=false
+    install_system_config "$NITRO_POWER_DIR/80-nvidia-pm.rules" "/etc/udev/rules.d/80-nvidia-pm.rules" || SYSTEM_CONFIG_OK=false
+
+    if [[ "$SYSTEM_CONFIG_OK" == true ]]; then
+        if ! sudo systemctl enable --now power-profiles-daemon.service; then
+            error "Could not enable power-profiles-daemon."
+            SYSTEM_CONFIG_OK=false
+        fi
+    fi
+
+    if [[ "$SYSTEM_CONFIG_OK" == true ]]; then
+        if ! sudo udevadm control --reload-rules; then
+            warning "Could not reload udev rules. They will still be loaded after reboot."
+        fi
+
+        if command -v mkinitcpio >/dev/null 2>&1; then
+            info "Rebuilding initramfs so the NVIDIA power option is available from boot..."
+            if ! sudo mkinitcpio -P; then
+                warning "The initramfs rebuild failed. Fix it before checking NVIDIA Runtime D3."
+            fi
+        else
+            warning "mkinitcpio was not found. Rebuild your initramfs before checking NVIDIA Runtime D3."
+        fi
+
+        success "Nitro 5 battery profile installed."
+    else
+        warning "The Nitro 5 system profile was not fully installed. Existing files with failed backups were preserved."
+        NITRO_POWER_ENABLED=false
+    fi
+fi
 
 # --------------------------------------------------
 # Finish
@@ -279,13 +431,21 @@ if [[ -d "$BACKUP_DIR" ]]; then
     printf 'Backup:        %s\n' "$BACKUP_DIR"
 fi
 
-if [[ "${#UNKNOWN_PACKAGES[@]:-0}" -gt 0 ]]; then
+if [[ "$NITRO_POWER_ENABLED" == true ]]; then
+    printf 'Power profile: Acer Nitro 5 (CachyOS PPD + NVIDIA Runtime D3)\n'
+fi
+
+if [[ "${#UNKNOWN_PACKAGES[@]}" -gt 0 ]]; then
     printf '\n'
     warning "Unresolved packages (install manually): ${UNKNOWN_PACKAGES[*]}"
 fi
 
 printf '\n'
 warning "Log out and back into Hyprland for the changes to fully take effect."
+
+if [[ "$NITRO_POWER_ENABLED" == true ]]; then
+    warning "Reboot once before checking whether the NVIDIA GPU reaches runtime suspend."
+fi
 
 printf '\n'
 info "You can start Hyprland with:"

@@ -1,109 +1,69 @@
-## Simple Hyprland Rice
+# CachyOS + Hyprland + Caelestia
 
-**Full showcase: https://youtu.be/-fGqZo_W268**
+Hyprland setup for CachyOS focused on development, security work and good
+battery life on a hybrid AMD/NVIDIA laptop.
 
-**Tutorial: https://youtu.be/eo9MejbzWto**
+[Caelestia Shell](https://github.com/caelestia-dots/shell) provides the bar,
+launcher, notifications, OSD, lock screen, session menu, dashboard and wallpaper
+picker. The setup keeps Brave, Kitty with Fish, Thunar and the existing Hyprland
+window workflow.
 
-Simple Hyprland setup focused on practical keybinds, productivity, and a smooth workflow easy to customize
+## Main features
 
-Feel free to use as inspiration or as a starting point for building your own setup.
+- Caelestia as the only desktop shell
+- Wallpaper-based Material You colours in Caelestia, Hyprland and Kitty
+- Fish syntax highlighting, autosuggestions and completions
+- Brave as the default browser
+- Brazilian ABNT2 keyboard by default, with US International as secondary
+- 60 Hz internal display on battery and preferred refresh rate on AC
+- NVIDIA Runtime D3 and no background NVIDIA polling
+- CachyOS power profiles: balanced on battery and performance on AC
 
-![](x.png)
-![](lock.png)
-![](z.png)
-![](ww.png)
+The wallpapers in `Wallpapers/` are copied to `~/Pictures/Wallpapers`, the
+default folder used by Caelestia. The installer keeps a valid wallpaper already
+selected by Caelestia. Otherwise, it selects the first compatible image it
+finds in that folder.
 
-Wallpapers: https://wallhaven.cc/user/43pr
+Caelestia extracts a dynamic palette from the active wallpaper. Its custom Kitty
+template is written to `~/.local/state/caelestia/theme/kitty.conf`; open Kitty
+windows reload when the palette changes. This changes terminal colours only.
+Fish remains responsible for command syntax highlighting.
 
-## Features
+## Keybinds
 
-* Waybar
-> Change volume with mouse wheel, mute, play/pause, next and blue light filter
-* Rofi
-> App search, clipboard history and switch opacity
-* Hyprlock
-* Wlogout
-* Custom wallpaper selector
-* Custom scripts
-* Spotify + Spicetify. Theme: text darkthemer
-* Fish shell with syntax highlighting, autosuggestions and completions
-* Brazilian ABNT2 keyboard by default, with US International as the secondary layout
+`Super` is the Windows key.
 
-### Wallpaper Selector
+| Keybind | Action |
+| --- | --- |
+| `Super + T` | Open Kitty |
+| `Super + D` | Open the Caelestia launcher |
+| `Super + E` | Open Thunar |
+| `Super + B` | Open Brave |
+| `Super + W` | Pick another random wallpaper |
+| `Super + Shift + W` | Show or hide all Caelestia panels |
+| `Super + N` | Open the Caelestia sidebar |
+| `Super + V` | Open clipboard history |
+| `Super + O` | Switch window opacity |
+| `Super + X` | Switch keyboard layout |
+| `Super + Tab` | Lock the session |
+| `Super + Grave` | Open the session menu |
+| `Super + R` | Start or stop screen recording with audio |
+| `Super + Q` | Close the active window |
+| `Super + F` | Toggle fullscreen |
+| `Super + Space` | Toggle floating mode |
 
-[hyprquickpaper](https://github.com/iamsurjog/hyprquickpaper)
+For the visual wallpaper picker, open the launcher and enter `>wallpaper`.
+To select the dynamic colour scheme again, enter `>scheme` or run:
 
-> check out the original source it explains how to setup I just made changes to it 
-
-### Most used keybinds
-
-> **$mod = Super / Windows key**
-
-| Keybind     | Action                    |
-| ----------- | ------------------------- |
-| `Super + T` | Open terminal             |
-| `Super + D` | Open application launcher |
-| `Super + E` | Open file manager         |
-| `Super + B` | Open browser              |
-| `Super + W` | Open wallpaper selector   |
-| `Super + O` | Switch opacity            |
-| `Super + V` | Open clipboard history    |
-| `Super + X` | Switch keyboard layout    |
-```ini
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell -n -c hyprquickpaper"))
-```
-```ini
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(home .. "/.config/hypr/scripts/opacity.sh"))
-```
-```ini
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
-```
-**Window Management and more**
-| Keybind         | Action              |
-| --------------- | ------------------- |
-| `Super + Q`     | Close active window |
-| `Super + F`     | Toggle fullscreen   |
-| `Super + Space` | Toggle floating     |
-| `Super + Tab`   | Lock screen         |
-| `Super + Esc`   | Open logout menu    |
-```ini
-hl.bind(mainMod .. " + GRAVE", hl.dsp.exec_cmd("pgrep -x wlogout >/dev/null || wlogout -b 1 -c 20 -r 20 -L 1700 -R 1700 -T 325 -B 325"))
-```
-**Move/resize window with mouse**
-```ini
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
-```
-```ini
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
-```
-**Toggle Waybar**
-```ini
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("sh -c 'pgrep -x waybar >/dev/null && pkill waybar || nohup waybar >/dev/null 2>&1 &'"))
+```bash
+caelestia scheme set -n dynamic
 ```
 
----
-
-### Installed Programs:
-
-```text
-Hyprland
-Waybar
-Rofi
-Hyprlock
-Wlogout
-Quickshell
-awww
-Grim
-Slurp
-Cliphist
-wl-clipboard
-```
-
----
 ## Installation
-> **READ:** Some paths and applications are specific to my setup. You may need to modify the configuration files to match your system.
 
-**Clone the repository and run the installer:**
+The installer targets Arch-based systems and installs official and AUR packages
+with `pacman` plus `paru` or `yay`. If neither AUR helper exists, it tries to
+build `yay` first.
 
 ```bash
 git clone https://github.com/rafabd1/dotfiles.git
@@ -112,25 +72,40 @@ chmod +x install.sh
 ./install.sh
 ```
 
-The installer will modify your ~/.config directory. 
+Existing configuration folders replaced by this repository are copied to a
+timestamped directory under `~/.config-backups/`. Log out and back into
+Hyprland after installation.
 
-Existing configuration files that are being replaced will be backed up automatically.
+## Hybrid GPU and battery
 
-After the installation finishes, restart Hyprland or log out and back in.
+On a detected Acer Nitro with AMD and NVIDIA graphics, the installer also:
 
-Kitty starts Fish directly, so syntax highlighting is available without changing
-the login shell used by scripts. Press `Super + X` or `Alt + Shift` to switch
-between Brazilian ABNT2 and US International.
+- installs Power Profiles Daemon and Powertop;
+- applies `balanced` on battery and `performance` on AC;
+- configures the NVIDIA GPU for Runtime D3 suspend;
+- switches the internal display to 60 Hz on battery;
+- disables Caelestia GPU monitoring so its dashboard does not wake the GTX.
+
+Reboot once after installation, then check the NVIDIA state without querying it
+through `nvidia-smi`:
 
 ```bash
-hyprctl reload
+~/.config/hypr/scripts/nvidia-power-status.sh
 ```
 
-If you encounter any issues, check the relevant configuration files under: ~/.config/
+With no NVIDIA workload running, `runtime_status=suspended` is the expected
+result. Hashcat wakes the GPU through CUDA or OpenCL and it should suspend again
+after Hashcat exits. Use `hashcat -I` to list its backend devices and `-d` to
+select the NVIDIA device.
 
----
+Use Powertop for measurement only. Its automatic tuning can overwrite settings
+managed by the active power profile.
 
-* [hyprquickpaper](https://github.com/iamsurjog/hyprquickpaper)
-* [samaritan-sddm-theme](https://github.com/omerwk/samaritan-sddm-theme)
+## Notes
 
-
+- `gpuType` is set to `None` and the GPU card is hidden from Caelestia's
+  dashboard to avoid periodic NVIDIA probes.
+- Adaptive Chromium theming is disabled, so Brave keeps its own selected theme
+  and does not receive a managed browser policy.
+- GTK and Qt theme rewriting is disabled. Caelestia and the terminal still
+  follow the wallpaper without taking over unrelated application settings.
