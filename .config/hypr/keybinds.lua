@@ -36,7 +36,7 @@ hl.bind(mainMod .. " + Delete", hl.dsp.exec_cmd("grim " .. home .. "/Pictures/$(
 hl.bind("Delete", hl.dsp.exec_cmd('grim -g "$(slurp)" ' .. home .. '/Pictures/$(date +%s).png'))
 
 -- Keyboard layout
-hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("hyprctl switchxkblayout current next"))
+hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("hyprctl switchxkblayout all next"))
 
 -- Toggle float window, center and rezise
 hl.bind(mainMod .. " + Space", function()

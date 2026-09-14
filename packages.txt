@@ -48,9 +48,25 @@ wireplumber
 # --------------------------------------------------
 
 kitty
+fish
+cachyos-fish-config
 thunar
 xed
 spotify-launcher
+brave-bin
+
+# --------------------------------------------------
+# Desktop services used by the configuration
+# --------------------------------------------------
+
+dunst
+network-manager-applet
+polkit-kde-agent
+playerctl
+pavucontrol
+gammastep
+nvtop
+gpu-screen-recorder
 
 # --------------------------------------------------
 # Media

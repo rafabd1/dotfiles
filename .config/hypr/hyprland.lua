@@ -34,7 +34,12 @@ hl.env("MOZ_ENABLE_WAYLAND", "1")
 
 hl.config({
     input = {
-        kb_layout = "us,latam",
+        -- Brazilian ABNT2 is the default layout. US International is the
+        -- secondary layout and can be selected with Super+X.
+        kb_model = "abnt2",
+        kb_layout = "br,us",
+        kb_variant = "abnt2,intl",
+        kb_options = "grp:alt_shift_toggle",
         follow_mouse = 1,
         sensitivity = 0.5,
         touchpad = {

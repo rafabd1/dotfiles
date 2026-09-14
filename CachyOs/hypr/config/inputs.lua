@@ -2,6 +2,10 @@
 
 hl.config({
     input = {
+        kb_model = "abnt2",
+        kb_layout = "br,us",
+        kb_variant = "abnt2,intl",
+        kb_options = "grp:alt_shift_toggle",
         sensitivity = 3,
         accel_profile = "flat",
     },

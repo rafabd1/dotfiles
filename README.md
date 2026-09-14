@@ -26,6 +26,8 @@ Wallpapers: https://wallhaven.cc/user/43pr
 * Custom wallpaper selector
 * Custom scripts
 * Spotify + Spicetify. Theme: text darkthemer
+* Fish shell with syntax highlighting, autosuggestions and completions
+* Brazilian ABNT2 keyboard by default, with US International as the secondary layout
 
 ### Wallpaper Selector
 
@@ -46,6 +48,7 @@ Wallpapers: https://wallhaven.cc/user/43pr
 | `Super + W` | Open wallpaper selector   |
 | `Super + O` | Switch opacity            |
 | `Super + V` | Open clipboard history    |
+| `Super + X` | Switch keyboard layout    |
 ```ini
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell -n -c hyprquickpaper"))
 ```
@@ -103,7 +106,7 @@ wl-clipboard
 **Clone the repository and run the installer:**
 
 ```bash
-git clone https://github.com/43PR/dotfiles.git
+git clone https://github.com/rafabd1/dotfiles.git
 cd dotfiles
 chmod +x install.sh
 ./install.sh
@@ -114,6 +117,10 @@ The installer will modify your ~/.config directory.
 Existing configuration files that are being replaced will be backed up automatically.
 
 After the installation finishes, restart Hyprland or log out and back in.
+
+Kitty starts Fish directly, so syntax highlighting is available without changing
+the login shell used by scripts. Press `Super + X` or `Alt + Shift` to switch
+between Brazilian ABNT2 and US International.
 
 ```bash
 hyprctl reload
