@@ -13,6 +13,6 @@ case "$choice" in
     *) exit 0 ;;
 esac
 
-sed -i "0,/opacity = \".* override\"/s//opacity = \"$opacity override\"/" ~/.config/hypr/rules.lua
+sed -i "s/^local nativeOpacity = .*/local nativeOpacity = \"$opacity override\"/" ~/.config/hypr/rules.lua
 
 hyprctl reload

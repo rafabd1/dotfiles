@@ -14,6 +14,7 @@ window workflow.
 - Wallpaper-based Material You colours in Caelestia, Hyprland and Kitty
 - Fast spatial animations without elastic overshoot or panel deformation
 - Fish syntax highlighting, autosuggestions and completions
+- Interactive `rm` moves files and directories to the desktop trash
 - Brave as the default browser
 - Brazilian ABNT2 keyboard by default, with US International as secondary
 - No automatic session lock; the display still turns off after five idle minutes
@@ -48,7 +49,7 @@ turns off and wakes without a password. `Super + Tab` still locks it manually.
 | `Super + Shift + W` | Show or hide all Caelestia panels |
 | `Super + N` | Open the Caelestia sidebar |
 | `Super + V` | Open clipboard history |
-| `Super + O` | Switch window opacity |
+| `Super + O` | Switch opacity for system utilities |
 | `Super + X` | Switch keyboard layout |
 | `Super + Tab` | Lock the session |
 | `Super + Grave` | Open the session menu |
@@ -63,7 +64,6 @@ turns off and wakes without a password. `Super + Tab` still locks it manually.
 | `Super + 1..0` | Switch to workspace 1..10 |
 | `Super + Shift + 1..0` | Send a window to workspace 1..10 |
 | `Super + Delete` | Capture the full screen |
-| `Delete` | Select and capture a region |
 | `Super + mouse wheel` | Zoom the desktop |
 
 For the visual wallpaper picker, open the launcher and enter `>wallpaper`.
@@ -122,3 +122,4 @@ managed by the active power profile.
   and does not receive a managed browser policy.
 - GTK and Qt theme rewriting is disabled. Caelestia and the terminal still
   follow the wallpaper without taking over unrelated application settings.
+- Use `command rm` only when permanent deletion is intentional.

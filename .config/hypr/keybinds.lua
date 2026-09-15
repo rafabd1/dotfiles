@@ -54,7 +54,6 @@ hl.bind(mainMod .. " + V", consumeSuper(hl.dsp.exec_cmd("pkill fuzzel || caelest
 
 -- Screenshots
 hl.bind(mainMod .. " + Delete", consumeSuper(hl.dsp.exec_cmd("caelestia screenshot")))
-hl.bind("Delete", hl.dsp.exec_cmd("caelestia screenshot -r"))
 
 -- Keyboard layout
 hl.bind(mainMod .. " + X", consumeSuper(hl.dsp.exec_cmd("hyprctl switchxkblayout all next")))

@@ -2,10 +2,19 @@
 -- Migrated from rules.conf
 -- Docs: https://wiki.hypr.land/Configuring/Basics/Window-Rules/
 
--- Opacity rules: 90% for all windows except fullscreen
+-- Applications are opaque by default. Transparency is limited to a small
+-- allowlist of desktop utilities.
 hl.window_rule({
     match = { class = ".*" },
-    opacity = "0.9 override",
+    opacity = "1.0 override",
+})
+
+local nativeOpacity = "0.9 override"
+local translucentSystemApps = "^(kitty|thunar|pavucontrol|org\\.pulseaudio\\.pavucontrol|nm-connection-editor|blueman-manager|btrfs-assistant)$"
+
+hl.window_rule({
+    match = { class = translucentSystemApps },
+    opacity = nativeOpacity,
 })
 
 hl.window_rule({
