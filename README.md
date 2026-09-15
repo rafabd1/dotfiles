@@ -12,12 +12,14 @@ window workflow.
 
 - Caelestia as the only desktop shell
 - Wallpaper-based Material You colours in Caelestia, Hyprland and Kitty
+- Fast spatial animations without elastic overshoot or panel deformation
 - Fish syntax highlighting, autosuggestions and completions
 - Brave as the default browser
 - Brazilian ABNT2 keyboard by default, with US International as secondary
+- No automatic session lock; the display still turns off after five idle minutes
 - 60 Hz internal display on battery and preferred refresh rate on AC
 - NVIDIA Runtime D3 and no background NVIDIA polling
-- CachyOS power profiles: balanced on battery and performance on AC
+- CachyOS power profiles: balanced on battery and the fastest profile exposed by the firmware on AC
 
 The wallpapers in `Wallpapers/` are copied to `~/Pictures/Wallpapers`, the
 default folder used by Caelestia. The installer keeps a valid wallpaper already
@@ -28,6 +30,9 @@ Caelestia extracts a dynamic palette from the active wallpaper. Its custom Kitty
 template is written to `~/.local/state/caelestia/theme/kitty.conf`; open Kitty
 windows reload when the palette changes. This changes terminal colours only.
 Fish remains responsible for command syntax highlighting.
+
+The session never locks automatically. After five idle minutes the display
+turns off and wakes without a password. `Super + Tab` still locks it manually.
 
 ## Keybinds
 
@@ -49,8 +54,17 @@ Fish remains responsible for command syntax highlighting.
 | `Super + Grave` | Open the session menu |
 | `Super + R` | Start or stop screen recording with audio |
 | `Super + Q` | Close the active window |
-| `Super + F` | Toggle fullscreen |
+| `Super + F` | Maximise without hiding browser controls |
+| `Super + Shift + F` | Toggle true fullscreen |
 | `Super + Space` | Toggle floating mode |
+| `Super + H/J/K/L` | Move focus left/down/up/right |
+| `Super + Shift + H/J/K/L` | Move the active window |
+| `Super + Ctrl + H/J/K/L` | Resize the active window |
+| `Super + 1..0` | Switch to workspace 1..10 |
+| `Super + Shift + 1..0` | Send a window to workspace 1..10 |
+| `Super + Delete` | Capture the full screen |
+| `Delete` | Select and capture a region |
+| `Super + mouse wheel` | Zoom the desktop |
 
 For the visual wallpaper picker, open the launcher and enter `>wallpaper`.
 To select the dynamic colour scheme again, enter `>scheme` or run:
@@ -81,7 +95,7 @@ Hyprland after installation.
 On a detected Acer Nitro with AMD and NVIDIA graphics, the installer also:
 
 - installs Power Profiles Daemon and Powertop;
-- applies `balanced` on battery and `performance` on AC;
+- applies `balanced` on battery and `performance` on AC when the firmware exposes it, otherwise it keeps `balanced`;
 - configures the NVIDIA GPU for Runtime D3 suspend;
 - switches the internal display to 60 Hz on battery;
 - disables Caelestia GPU monitoring so its dashboard does not wake the GTX.
@@ -94,9 +108,8 @@ through `nvidia-smi`:
 ```
 
 With no NVIDIA workload running, `runtime_status=suspended` is the expected
-result. Hashcat wakes the GPU through CUDA or OpenCL and it should suspend again
-after Hashcat exits. Use `hashcat -I` to list its backend devices and `-d` to
-select the NVIDIA device.
+result. Applications can wake the dedicated GPU when needed; it should suspend
+again after they exit.
 
 Use Powertop for measurement only. Its automatic tuning can overwrite settings
 managed by the active power profile.

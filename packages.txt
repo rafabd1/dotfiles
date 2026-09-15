@@ -46,7 +46,11 @@ wireplumber
 kitty
 fish
 cachyos-fish-config
+micro
 thunar
+gvfs
+tumbler
+papirus-icon-theme
 xed
 spotify-launcher
 brave-bin
@@ -77,7 +81,7 @@ hyprmod
 # --------------------------------------------------
 
 ttf-jetbrains-mono-nerd
-ttf-font-awesome
+otf-font-awesome
 
 # --------------------------------------------------
 # Utilities

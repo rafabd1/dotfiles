@@ -16,7 +16,10 @@ hl.bind("SUPER + Tab", hl.dsp.global("caelestia:lock"))
 hl.bind(mainMod .. " + GRAVE", hl.dsp.global("caelestia:session"))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("caelestia wallpaper -r"))
 
-hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = 0 }))
+-- Maximise by default so browsers keep their tabs and address bar visible.
+-- The shifted binding remains available for true fullscreen.
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = 1 }))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = 0 }))
 
 hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(home .. "/.config/hypr/scripts/opacity.sh"))
 

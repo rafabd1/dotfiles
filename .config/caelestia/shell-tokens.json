@@ -1,0 +1,9 @@
+{
+  "appearance": {
+    "curves": {
+      "expressiveFastSpatial": [0.33, 1.0, 0.68, 1.0, 1.0, 1.0],
+      "expressiveDefaultSpatial": [0.33, 1.0, 0.68, 1.0, 1.0, 1.0],
+      "expressiveSlowSpatial": [0.33, 1.0, 0.68, 1.0, 1.0, 1.0]
+    }
+  }
+}

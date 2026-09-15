@@ -250,6 +250,20 @@ info "Installing dotfiles..."
 
 cp -a "$REPO_DIR/.config/." "$CONFIG_DIR/"
 
+# GTK bookmarks contain absolute paths, so generate them for the current user
+# instead of shipping paths from the machine where the dotfiles were created.
+GTK_BOOKMARKS="$CONFIG_DIR/gtk-3.0/bookmarks"
+if [[ ! -f "$GTK_BOOKMARKS" ]] || grep -q '/home/rp34/' "$GTK_BOOKMARKS"; then
+    mkdir -p "$(dirname "$GTK_BOOKMARKS")"
+    {
+        for directory in Documents Downloads Pictures Music Videos Projects dotfiles .config; do
+            if [[ -d "$HOME/$directory" ]]; then
+                printf 'file://%s/%s %s\n' "$HOME" "$directory" "${directory#.}"
+            fi
+        done
+    } > "$GTK_BOOKMARKS"
+fi
+
 success "Dotfiles installed."
 
 # --------------------------------------------------

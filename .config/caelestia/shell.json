@@ -1,10 +1,30 @@
 {
+  "appearance": {
+    "deformScale": 0,
+    "anim": {
+      "durations": {
+        "scale": 0.6
+      }
+    }
+  },
   "general": {
     "apps": {
       "terminal": ["kitty"],
       "audio": ["pavucontrol"],
       "playback": ["mpv"],
       "explorer": ["thunar"]
+    },
+    "idle": {
+      "lockBeforeSleep": false,
+      "inhibitWhenAudio": true,
+      "inhibitWhenCharging": false,
+      "timeouts": [
+        {
+          "timeout": 300,
+          "idleAction": "dpms off",
+          "returnAction": "dpms on"
+        }
+      ]
     }
   },
   "dashboard": {
@@ -16,7 +36,9 @@
   "services": {
     "gpuType": "None",
     "smartScheme": true,
-    "defaultPlayer": "Spotify"
+    "defaultPlayer": "Spotify",
+    "useFahrenheit": false,
+    "useFahrenheitPerformance": false
   },
   "paths": {
     "wallpaperDir": "~/Pictures/Wallpapers"

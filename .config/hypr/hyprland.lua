@@ -87,13 +87,15 @@ hl.config({
     },
 })
 
-hl.curve("easeOut", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.0} } })
+-- Standard cubic ease-out: keeps the opening motion, but reaches the final
+-- position smoothly instead of snapping during the last frames.
+hl.curve("easeOut", { type = "bezier", points = { {0.33, 1.0}, {0.68, 1.0} } })
 
 hl.animation({ leaf = "windows",    enabled = true, speed = 5, bezier = "easeOut" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "easeOut" })
 hl.animation({ leaf = "border",     enabled = true, speed = 5, bezier = "default" })
 hl.animation({ leaf = "fade",       enabled = true, speed = 4, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 7, bezier = "default", style = "slidefade" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 7, bezier = "easeOut", style = "slidefade" })
 
 -- LAYOUT
 hl.config({

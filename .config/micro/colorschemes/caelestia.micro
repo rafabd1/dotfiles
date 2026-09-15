@@ -1,0 +1,43 @@
+# Follow the terminal palette generated from the current wallpaper.
+color-link default "default"
+color-link comment "brightblack"
+
+color-link identifier "brightblue"
+color-link identifier.class "brightcyan"
+color-link identifier.var "blue"
+
+color-link constant "brightmagenta"
+color-link constant.number "brightmagenta"
+color-link constant.string "brightgreen"
+
+color-link symbol "brightcyan"
+color-link symbol.brackets "white"
+color-link symbol.tag "brightblue"
+
+color-link type "brightcyan"
+color-link type.keyword "brightyellow"
+
+color-link special "brightmagenta"
+color-link statement "brightmagenta"
+color-link preproc "brightyellow"
+
+color-link underlined "underline brightblue"
+color-link error "bold brightred"
+color-link todo "bold brightyellow"
+
+color-link diff-added "brightgreen"
+color-link diff-modified "brightyellow"
+color-link diff-deleted "brightred"
+
+color-link gutter-error "brightred"
+color-link gutter-warning "brightyellow"
+
+color-link statusline "white,black"
+color-link tabbar "white,black"
+color-link indent-char "brightblack"
+color-link line-number "brightblack"
+color-link current-line-number "brightwhite"
+
+color-link cursor-line "black"
+color-link color-column "black"
+color-link type.extended "default"
