@@ -41,7 +41,7 @@ turns off and wakes without a password. `Super + Tab` still locks it manually.
 | Keybind | Action |
 | --- | --- |
 | `Super + T` | Open Kitty |
-| `Super + D` | Open the Caelestia launcher |
+| `Super` | Open the Caelestia launcher when tapped by itself |
 | `Super + E` | Open Thunar |
 | `Super + B` | Open Brave |
 | `Super + W` | Pick another random wallpaper |
