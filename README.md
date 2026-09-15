@@ -1,125 +1,63 @@
-# CachyOS + Hyprland + Caelestia
+# CachyOS rice
 
-Hyprland setup for CachyOS focused on development, security work and good
-battery life on a hybrid AMD/NVIDIA laptop.
+## Rice
 
-[Caelestia Shell](https://github.com/caelestia-dots/shell) provides the bar,
-launcher, notifications, OSD, lock screen, session menu, dashboard and wallpaper
-picker. The setup keeps Brave, Kitty with Fish, Thunar and the existing Hyprland
-window workflow.
+- Hyprland + [Caelestia Shell](https://github.com/caelestia-dots/shell).
+- Brave, Thunar and Kitty with Fish; JetBrains Mono at 11 pt.
+- Wallpaper-based colours in Caelestia, Hyprland and Kitty.
+- Transparency only for desktop utilities; other apps stay opaque.
+- ABNT2 by default, US International as the second layout.
 
-## Main features
+[Wallpapers](https://github.com/rafabd1/dotfiles/tree/main/Wallpapers) are copied
+to `~/Pictures/Wallpapers`. Open the launcher and enter
+`>wallpaper` for the picker, or `>scheme` to change the colour scheme.
 
-- Caelestia as the only desktop shell
-- Wallpaper-based Material You colours in Caelestia, Hyprland and Kitty
-- Fast spatial animations without elastic overshoot or panel deformation
-- Fish syntax highlighting, autosuggestions and completions
-- Interactive `rm` moves files and directories to the desktop trash
-- Brave as the default browser
-- Brazilian ABNT2 keyboard by default, with US International as secondary
-- No automatic session lock; the display still turns off after five idle minutes
-- 60 Hz internal display on battery and preferred refresh rate on AC
-- NVIDIA Runtime D3 and no background NVIDIA polling
-- CachyOS power profiles: balanced on battery and the fastest profile exposed by the firmware on AC
+## Shortcuts
 
-The wallpapers in `Wallpapers/` are copied to `~/Pictures/Wallpapers`, the
-default folder used by Caelestia. The installer keeps a valid wallpaper already
-selected by Caelestia. Otherwise, it selects the first compatible image it
-finds in that folder.
-
-Caelestia extracts a dynamic palette from the active wallpaper. Its custom Kitty
-template is written to `~/.local/state/caelestia/theme/kitty.conf`; open Kitty
-windows reload when the palette changes. This changes terminal colours only.
-Fish remains responsible for command syntax highlighting.
-
-The session never locks automatically. After five idle minutes the display
-turns off and wakes without a password. `Super + Tab` still locks it manually.
-
-## Keybinds
-
-`Super` is the Windows key.
-
-| Keybind | Action |
+| Shortcut | Action |
 | --- | --- |
-| `Super + T` | Open Kitty |
-| `Super` | Open the Caelestia launcher when tapped by itself |
-| `Super + E` | Open Thunar |
-| `Super + B` | Open Brave |
-| `Super + W` | Pick another random wallpaper |
-| `Super + Shift + W` | Show or hide all Caelestia panels |
-| `Super + N` | Open the Caelestia sidebar |
-| `Super + V` | Open clipboard history |
-| `Super + O` | Switch opacity for system utilities |
-| `Super + X` | Switch keyboard layout |
-| `Super + Tab` | Lock the session |
-| `Super + Grave` | Open the session menu |
-| `Super + R` | Start or stop screen recording with audio |
-| `Super + Q` | Close the active window |
-| `Super + F` | Maximise without hiding browser controls |
-| `Super + Shift + F` | Toggle true fullscreen |
-| `Super + Space` | Toggle floating mode |
-| `Super + H/J/K/L` | Move focus left/down/up/right |
-| `Super + Shift + H/J/K/L` | Move the active window |
-| `Super + Ctrl + H/J/K/L` | Resize the active window |
-| `Super + 1..0` | Switch to workspace 1..10 |
-| `Super + Shift + 1..0` | Send a window to workspace 1..10 |
-| `Super + Delete` | Capture the full screen |
-| `Super + mouse wheel` | Zoom the desktop |
+| `Super` | Launcher |
+| `Super + T` | Kitty |
+| `Super + E` | Thunar |
+| `Super + B` | Brave |
+| `Super + W` | Random wallpaper |
+| `Super + Shift + W` | Toggle Caelestia panels |
+| `Super + N` | Sidebar |
+| `Super + V` | Clipboard history |
+| `Super + O` | Opacity of desktop utilities |
+| `Super + X` or `Alt + Shift` | Switch keyboard layout |
+| `Super + Tab` | Lock |
+| `Super + Grave` | Session menu |
+| `Super + R` | Toggle screen recording |
+| `Super + Delete` | Screenshot |
+| `Super + Q` | Close window |
+| `Super + F` | Maximise |
+| `Super + Shift + F` | Fullscreen |
+| `Super + Space` | Toggle floating window |
+| `Super + H/J/K/L` | Focus left/down/up/right |
+| `Super + Shift + H/J/K/L` | Move window |
+| `Super + Ctrl + H/J/K/L` | Resize window |
+| `Super + 1..0` | Workspace 1..10 |
+| `Super + Shift + 1..0` | Send window to workspace |
+| `Super + left/right mouse drag` | Move/resize window |
+| `Super + mouse wheel` | Desktop zoom |
+| `Super + Shift + E` | End session |
 
-For the visual wallpaper picker, open the launcher and enter `>wallpaper`.
-To select the dynamic colour scheme again, enter `>scheme` or run:
+## GPU and power
 
-```bash
-caelestia scheme set -n dynamic
-```
+On supported hybrid graphics systems, the integrated GPU handles the desktop.
+The dedicated GPU suspends when idle and wakes for GPU workloads. Caelestia
+GPU polling is disabled to avoid keeping it awake.
 
-## Installation
+On battery: `balanced` and a 60 Hz internal display. On AC: `performance` when
+available, otherwise `balanced`, with the preferred display refresh rate.
 
-The installer targets Arch-based systems and installs official and AUR packages
-with `pacman` plus `paru` or `yay`. If neither AUR helper exists, it tries to
-build `yay` first.
+GPU suspend and power profiles depend on driver and firmware support.
 
-```bash
-git clone https://github.com/rafabd1/dotfiles.git
-cd dotfiles
-chmod +x install.sh
-./install.sh
-```
+## Screenshots
 
-Existing configuration folders replaced by this repository are copied to a
-timestamped directory under `~/.config-backups/`. Log out and back into
-Hyprland after installation.
+![Kitty and fastfetch](screenshots/fastfetch.png)
 
-## Hybrid GPU and battery
+![Thunar and Kitty](screenshots/thunar-kitty.png)
 
-On a detected Acer Nitro with AMD and NVIDIA graphics, the installer also:
-
-- installs Power Profiles Daemon and Powertop;
-- applies `balanced` on battery and `performance` on AC when the firmware exposes it, otherwise it keeps `balanced`;
-- configures the NVIDIA GPU for Runtime D3 suspend;
-- switches the internal display to 60 Hz on battery;
-- disables Caelestia GPU monitoring so its dashboard does not wake the GTX.
-
-Reboot once after installation, then check the NVIDIA state without querying it
-through `nvidia-smi`:
-
-```bash
-~/.config/hypr/scripts/nvidia-power-status.sh
-```
-
-With no NVIDIA workload running, `runtime_status=suspended` is the expected
-result. Applications can wake the dedicated GPU when needed; it should suspend
-again after they exit.
-
-Use Powertop for measurement only. Its automatic tuning can overwrite settings
-managed by the active power profile.
-
-## Notes
-
-- `gpuType` is set to `None` and the GPU card is hidden from Caelestia's
-  dashboard to avoid periodic NVIDIA probes.
-- Adaptive Chromium theming is disabled, so Brave keeps its own selected theme
-  and does not receive a managed browser policy.
-- GTK and Qt theme rewriting is disabled. Caelestia and the terminal still
-  follow the wallpaper without taking over unrelated application settings.
-- Use `command rm` only when permanent deletion is intentional.
+![Caelestia dashboard](screenshots/dashboard.png)
