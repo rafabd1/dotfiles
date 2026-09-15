@@ -7,6 +7,9 @@
       }
     }
   },
+  "border": {
+    "rounding": 8
+  },
   "general": {
     "apps": {
       "terminal": ["kitty"],
